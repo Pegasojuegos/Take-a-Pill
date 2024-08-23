@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://b7vrfpqnbenr2"]
+
+[ext_resource type="PackedScene" uid="uid://noigxkqenfra" path="res://scenes/board.tscn" id="1_bdr8t"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Board" parent="." instance=ExtResource("1_bdr8t")]
+position = Vector2(576, 324)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(576, 324)
