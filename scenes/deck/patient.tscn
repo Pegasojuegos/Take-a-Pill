@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://phogh8u6jgco" path="res://scenes/entity.tscn" id="1_qhhtq"]
 [ext_resource type="Script" path="res://scripts/deck/patient.gd" id="2_icbxt"]
-[ext_resource type="Texture2D" uid="uid://cu2vvlt3xmnaa" path="res://assets/images/deck/patient.png" id="3_35axf"]
+[ext_resource type="Texture2D" uid="uid://4vr5g2sj2kch" path="res://assets/images/deck/card_patient.png" id="3_dr5lq"]
 
 [node name="Patient" instance=ExtResource("1_qhhtq")]
 script = ExtResource("2_icbxt")
@@ -12,4 +12,4 @@ patientLige = 5
 patientDamage = 1
 
 [node name="Sprite2D" parent="." index="0"]
-texture = ExtResource("3_35axf")
+texture = ExtResource("3_dr5lq")

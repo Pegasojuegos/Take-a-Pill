@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b0dyf7ullikn0"
-path="res://.godot/imported/drugs.png-3f034149db75f17fa05597c3b33c7f1b.ctex"
+uid="uid://4vr5g2sj2kch"
+path="res://.godot/imported/card_patient.png-c443f53f95288ba6a21e1dc056759d95.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/deck/drugs.png"
-dest_files=["res://.godot/imported/drugs.png-3f034149db75f17fa05597c3b33c7f1b.ctex"]
+source_file="res://assets/images/deck/card_patient.png"
+dest_files=["res://.godot/imported/card_patient.png-c443f53f95288ba6a21e1dc056759d95.ctex"]
 
 [params]
 

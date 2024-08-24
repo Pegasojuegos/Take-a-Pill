@@ -1,19 +1,25 @@
 extends Node2D
 
 @export var crafts = [
-	{"ingredients": {"Drugs": 2},"result": {"Patient": 2}},
+	{"ingredients": {"Pharmacy": 1, "Patient": 1}, "result": {"Drugs":2}},
+	{"ingredients": {"Drugs": 3, "Patient":1},"result": {"Medication": 2}},
 ]
+@export var turnsPerRound: int = 5
+var turnsLeft: int = turnsPerRound
 
 func _ready():
 	var patient = preload("res://scenes/deck/patient.tscn").instantiate()
 	patient.position.x = -100
-	$CardsInGame.add_child(patient)
-	var drugs = preload("res://scenes/deck/drugs.tscn").instantiate()
-	drugs.position.x = 50
-	$CardsInGame.add_child(drugs)
-	var drugs2 = preload("res://scenes/deck/drugs.tscn").instantiate()
-	drugs2.position.x = 200
-	$CardsInGame.add_child(drugs2)
+	$PatientsInGame.add_child(patient)
+	var pharmacy = preload("res://scenes/deck/pharmacy.tscn").instantiate()
+	pharmacy.position.x = 50
+	$CardsInGame.add_child(pharmacy)
+	#var drugs = preload("res://scenes/deck/drugs.tscn").instantiate()
+	#drugs.position.x = 50
+	#$CardsInGame.add_child(drugs)
+	#var drugs2 = preload("res://scenes/deck/drugs.tscn").instantiate()
+	#drugs2.position.x = 200
+	#$CardsInGame.add_child(drugs2)
 
 func checkCrafting(selectedCards: Array):
 	#Count how many ingredients are of each type
@@ -46,6 +52,8 @@ func checkCrafting(selectedCards: Array):
 					card.use(1)
 
 func createCraft(cards: Dictionary, newPositon: Vector2):
+	turnsLeft -= 1
+	print(turnsLeft)
 	for card in cards.keys():
 		for i in range(cards[card]):
 			var cardPath = "res://scenes/deck/" + card.to_lower() + ".tscn"
@@ -55,6 +63,12 @@ func createCraft(cards: Dictionary, newPositon: Vector2):
 				var newCard = newCardScene.instantiate()
 				newCard.position.x = newPositon.x + 100
 				newCard.position.y = newPositon.y + 100
-				$CardsInGame.add_child(newCard)
+				
+				# Difference between some tipes to have count of them
+				match newCard.cardName:
+					"Patient": $PatientsInGame.add_child(newCard)
+					"Medication": $MedicationsInGame.add_child(newCard)
+					_: $CardsInGame.add_child(newCard)
+
 			else:
 				print("Failed to load scente: " + cardPath)
