@@ -2,27 +2,41 @@ extends Node2D
 
 class_name Card
 
+var cardName: String
 var description: String
-var life: int
 var dragging: bool
+@export var cardsUnder: Array = []
+static var cardBeingDragged: Card = null
 
-func _on_area_2d_input_event(viewport, event, shape_idx):
+func _init(cardName: String, description: String):
+	self.cardName = cardName
+	self.description = description
+
+func _on_area_2d_input_event(_viewport, event, _shape_idx):
 	dragCard(event)
 	
 
-func _process(delta):
+func _process(_delta):
 	#while dragging follow the mouse
 	if dragging:
 		global_position = get_global_mouse_position()
 
-#On click activate dragging and take to the front, on unclick desactivate dragging
+# On click activate dragging and take to the front, on unclick desactivate dragging
 func dragCard(event):
 	if event is InputEventMouseButton and isTopCard():
-		if event.is_pressed():
+		if event.is_pressed() and Card.cardBeingDragged == null:# Only drag if no other card is being dragged
 			dragging = true
+			Card.cardBeingDragged = self
 			get_parent().move_child(self, get_parent().get_child_count()-1)# Bring cart to the front
-		else:
+		elif not event.is_pressed() and dragging:
 			dragging = false
+			Card.cardBeingDragged = null
+			# If there are cards under add self to the group and call crafting
+			# then erase self from the cardsUnder
+			if cardsUnder.size() > 0:
+				cardsUnder.append(self)
+				get_parent().get_parent().checkCrafting(cardsUnder)
+				cardsUnder.clear()
 
 # Function to check if this card is the topmost at the mouse position.
 func isTopCard() -> bool:
@@ -34,19 +48,15 @@ func isTopCard() -> bool:
 			if child.global_position.distance_to(get_global_mouse_position()) < global_position.distance_to(get_global_mouse_position()) and child.z_index >= z_index:
 				res = false
 	return res
-	
 
-func usar():
-	pass
-
-
-
-
-
-
+# Detect when contact with another card and save it
 func _on_area_2d_area_entered(area):
-	pass # Replace with function body.
+	if area.get_parent() is Card and area.get_parent() != self:
+		cardsUnder.append(area.get_parent())
 
-
+# Detect when leave contact with another card and forget it
 func _on_area_2d_area_exited(area):
-	pass # Replace with function body.
+	if area.get_parent() is Card and area.get_parent() !=self :
+		cardsUnder.erase(area.get_parent())
+
+

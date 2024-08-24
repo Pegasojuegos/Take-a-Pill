@@ -5,3 +5,5 @@
 
 [node name="Entity" instance=ExtResource("1_53l4r")]
 script = ExtResource("1_10qy0")
+life = 0
+damage = 0

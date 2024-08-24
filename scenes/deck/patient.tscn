@@ -6,6 +6,10 @@
 
 [node name="Patient" instance=ExtResource("1_qhhtq")]
 script = ExtResource("2_icbxt")
+patientName = "Patient"
+patientDescription = "A sick patient"
+patientLige = 5
+patientDamage = 1
 
 [node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("3_35axf")

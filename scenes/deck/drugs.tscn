@@ -6,6 +6,9 @@
 
 [node name="Drugs" instance=ExtResource("1_2n32l")]
 script = ExtResource("2_184bn")
+drugsName = "Drugs"
+dugsDescription = "Some strange dugs"
+drugsUses = 2
 
 [node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("3_hfttu")
