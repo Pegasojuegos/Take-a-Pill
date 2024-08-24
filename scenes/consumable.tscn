@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://cd2vhl7qalsf0"]
+
+[ext_resource type="PackedScene" uid="uid://eeokp7umj4rr" path="res://scenes/card.tscn" id="1_wsvtv"]
+[ext_resource type="Script" path="res://scripts/consumable.gd" id="2_gmul6"]
+
+[node name="Consumable" instance=ExtResource("1_wsvtv")]
+script = ExtResource("2_gmul6")
