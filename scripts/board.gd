@@ -4,13 +4,17 @@ extends Node2D
 	{"ingredients": {"Pharmacy": 1, "Patient": 1}, "result": {"Drugs":2}},
 	{"ingredients": {"Drugs": 3, "Patient":1},"result": {"Medication": 2}},
 ]
-@export var turnsPerRound: int = 5
-var turnsLeft: int = turnsPerRound
+@export var turnsPerDay: int = 5
+var turnsLeft: int = turnsPerDay
+var days: int = 1
+var patientsInGame: Array = []
+var medicationsInGame: Array = []
 
 func _ready():
 	var patient = preload("res://scenes/deck/patient.tscn").instantiate()
 	patient.position.x = -100
-	$PatientsInGame.add_child(patient)
+	patientsInGame.append(patient)
+	$CardsInGame.add_child(patient)
 	var pharmacy = preload("res://scenes/deck/pharmacy.tscn").instantiate()
 	pharmacy.position.x = 50
 	$CardsInGame.add_child(pharmacy)
@@ -43,8 +47,8 @@ func checkCrafting(selectedCards: Array):
 				craftable = false
 				break # If one ingredient is missing the craft doesn't match
 		
-		# If all ingredients are present call craft and use consumables
-		if craftable:
+		# If all ingredients are present and can play turn call craft and use consumables
+		if craftable and playTurns(1):
 			createCraft(craft["result"],selectedCards[0].position)
 			
 			for card in selectedCards:
@@ -52,8 +56,6 @@ func checkCrafting(selectedCards: Array):
 					card.use(1)
 
 func createCraft(cards: Dictionary, newPositon: Vector2):
-	turnsLeft -= 1
-	print(turnsLeft)
 	for card in cards.keys():
 		for i in range(cards[card]):
 			var cardPath = "res://scenes/deck/" + card.to_lower() + ".tscn"
@@ -64,11 +66,27 @@ func createCraft(cards: Dictionary, newPositon: Vector2):
 				newCard.position.x = newPositon.x + 100
 				newCard.position.y = newPositon.y + 100
 				
-				# Difference between some tipes to have count of them
+				# Safe patients and medications in the array
 				match newCard.cardName:
-					"Patient": $PatientsInGame.add_child(newCard)
-					"Medication": $MedicationsInGame.add_child(newCard)
-					_: $CardsInGame.add_child(newCard)
+					"Patient": patientsInGame.append(newCard)
+					"Medication": medicationsInGame.append(newCard)
+				
+				$CardsInGame.add_child(newCard)
 
 			else:
 				print("Failed to load scente: " + cardPath)
+
+func playTurns(numberOfTurns) -> bool:
+	var canPlayTurns = true
+	# You can't spend more turns than turns left
+	if (numberOfTurns < turnsLeft):		
+		turnsLeft -= numberOfTurns
+		print(turnsLeft," ",days)
+		
+		# Next day logic
+		if turnsLeft <= 0:
+			days += 1
+			turnsLeft = turnsPerDay
+		
+	else: canPlayTurns = false
+	return canPlayTurns

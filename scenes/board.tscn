@@ -11,7 +11,3 @@ texture_filter = 1
 texture = ExtResource("2_kxwac")
 
 [node name="CardsInGame" type="Node2D" parent="."]
-
-[node name="PatientsInGame" type="Node2D" parent="."]
-
-[node name="MedicationsInGame" type="Node2D" parent="."]
