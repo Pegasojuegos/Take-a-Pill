@@ -9,4 +9,4 @@ func _init():
 	super._init(patientName, patientDescription, patientLige, patientDamage)
 
 func goCrazy():
-	$Sprite2D.texture = load("res://assets/images/carta.png")
+	$Sprite2D.texture = load("res://assets/images/deck/card_flesh.png")
