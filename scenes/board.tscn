@@ -11,3 +11,9 @@ texture_filter = 1
 texture = ExtResource("2_kxwac")
 
 [node name="CardsInGame" type="Node2D" parent="."]
+
+[node name="Label" type="Label" parent="."]
+offset_left = -341.0
+offset_top = -175.0
+offset_right = -248.0
+offset_bottom = -126.0
