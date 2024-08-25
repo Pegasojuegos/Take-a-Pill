@@ -7,3 +7,6 @@ extends Entity
 
 func _init():
 	super._init(patientName, patientDescription, patientLige, patientDamage)
+
+func goCrazy():
+	$Sprite2D.texture = load("res://assets/images/carta.png")
