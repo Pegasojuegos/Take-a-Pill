@@ -18,6 +18,7 @@ func _ready():
 	for i in range(patientsNumber):
 		var patient = preload("res://scenes/deck/patient.tscn").instantiate()
 		patient.position.x = -100
+		patient.position.y = i*31
 		patientsInGame.append(patient)
 		$CardsInGame.add_child(patient)
 	var pharmacy = preload("res://scenes/deck/pharmacy.tscn").instantiate()
@@ -77,7 +78,7 @@ func createCraft(cards: Dictionary, newPositon: Vector2):
 			if newCardScene:
 				var newCard = newCardScene.instantiate()
 				newCard.position.x = newPositon.x + 100
-				newCard.position.y = newPositon.y + 100
+				newCard.position.y = newPositon.y + 100 + 31*i
 				
 				# Safe patients and medications in the array
 				match newCard.cardName:
