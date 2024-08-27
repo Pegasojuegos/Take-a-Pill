@@ -4,31 +4,38 @@ extends Node2D
 	{"ingredients": {"Pharmacy": 1, "Patient": 1}, "result": {"Drugs":2}},
 	{"ingredients": {"Drugs": 3, "Patient":1},"result": {"Medication": 2}},
 ]
-@export var turnsPerDay: int = 3
-var turnsLeft: int = turnsPerDay
+
 var days: int = 1
+var craftingTime = 5
 var patientsInGame: Array = []
 var medicationsInGame: Array = []
 
 func _ready():
-	$Label.text = "Days: "+str(days)+"\n Turns left: "+str(turnsLeft)
-	
 	#Generate initial patients
+	$Day.start()
 	var patientsNumber = 4
+	var pharmacyNumber = 2
 	for i in range(patientsNumber):
 		var patient = preload("res://scenes/deck/patient.tscn").instantiate()
 		patient.position.x = -100
+		patient.position.y = i*31
 		patientsInGame.append(patient)
 		$CardsInGame.add_child(patient)
-	var pharmacy = preload("res://scenes/deck/pharmacy.tscn").instantiate()
-	pharmacy.position.x = 50
-	$CardsInGame.add_child(pharmacy)
+	
+	for i in range(pharmacyNumber):
+		var pharmacy = preload("res://scenes/deck/pharmacy.tscn").instantiate()
+		pharmacy.position.x = 50
+		pharmacy.position.y = i*31
+		$CardsInGame.add_child(pharmacy)
 	#var drugs = preload("res://scenes/deck/drugs.tscn").instantiate()
 	#drugs.position.x = 50
 	#$CardsInGame.add_child(drugs)
 	#var drugs2 = preload("res://scenes/deck/drugs.tscn").instantiate()
 	#drugs2.position.x = 200
 	#$CardsInGame.add_child(drugs2)
+
+func _process(_delta):
+	$Label.text = "Day: " + str(days) + "\n" + str( "%0.1f" % $Day.time_left) #Show time with one decimal
 
 func checkCrafting(selectedCards: Array):
 	#Count how many ingredients are of each type
@@ -59,16 +66,12 @@ func checkCrafting(selectedCards: Array):
 				break
 		
 		# If all ingredients are present and can play turn call craft and use consumables
-		if craftable and canPlayTurns(1):
-			createCraft(craft["result"],selectedCards[0].position)
-			
-			for card in selectedCards:
-				if card is Consumable:
-					card.use(1)
-			
-			playTurns(1)
+		if craftable:
+			startCrafting(craft["result"],selectedCards)
+			#createCraft(craft["result"],selectedCards[0].position)
 
-func createCraft(cards: Dictionary, newPositon: Vector2):
+func createCraft(cards: Dictionary, selectedCards: Array):
+	var newPositon = selectedCards[0].position
 	for card in cards.keys():
 		for i in range(cards[card]):
 			var cardPath = "res://scenes/deck/" + card.to_lower() + ".tscn"
@@ -77,7 +80,7 @@ func createCraft(cards: Dictionary, newPositon: Vector2):
 			if newCardScene:
 				var newCard = newCardScene.instantiate()
 				newCard.position.x = newPositon.x + 100
-				newCard.position.y = newPositon.y + 100
+				newCard.position.y = newPositon.y + 100 + 31*i
 				
 				# Safe patients and medications in the array
 				match newCard.cardName:
@@ -85,26 +88,16 @@ func createCraft(cards: Dictionary, newPositon: Vector2):
 					"Medication": medicationsInGame.append(newCard)
 				
 				$CardsInGame.add_child(newCard)
-
 			else:
 				print("Failed to load scente: " + cardPath)
-
-# You can't spend more turns than turns left
-func canPlayTurns(numberOfTurns):
-	return numberOfTurns <= turnsLeft
-
-func playTurns(numberOfTurns):		
-	turnsLeft -= numberOfTurns
 	
-	# Next day logic
-	if turnsLeft <= 0:
-		nextDay()
-	
-	$Label.text = "Days: "+str(days)+"\n Turns left: "+str(turnsLeft)
+	for card in selectedCards:
+		if card is Consumable:
+			card.use(1)
+
 
 func nextDay():
 	days += 1
-	turnsLeft = turnsPerDay
 	
 	if medicationsInGame >= patientsInGame:
 		#Use one medication for each patient
@@ -119,3 +112,23 @@ func nextDay():
 		for i in range(patientsInGame.size() - medicationsInGame.size()):
 			patientsInGame[i].goCrazy()
 		print("Die")
+	$Day.start()
+
+func startCrafting(cards: Dictionary, selectedCards: Array):
+	# Create a crafting node
+	var craftingInstance = Crafting.new(craftingTime,selectedCards.duplicate(true), cards)
+	add_child(craftingInstance)
+	
+	# Connect the signal to handle crafting finish
+	craftingInstance.connect("craftingCompleted", Callable(self, "_on_crafting_complete"))
+	
+	# Connect cards to be aviable to cancel crafting if moves
+	for card in selectedCards:
+		card.connect("cardRemoved", Callable(craftingInstance, "cancel_crafting"))
+
+func _on_crafting_complete(cards: Dictionary, selectedCards: Array):
+	createCraft(cards,selectedCards)
+
+
+func _on_day_timeout():
+	nextDay()
