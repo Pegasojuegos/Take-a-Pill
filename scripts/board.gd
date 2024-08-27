@@ -1,12 +1,23 @@
 extends Node2D
 
 @export var crafts = [
+	{"ingredients": {"Flesh": 2, "Drugs": 1, "Patient": 1}, "result": {"Zombie": 1}},
+	{"ingredients": {"Dump": 1, "Patient": 1}, "result": {"Fabric": 1, "Scrap": 1}},
+	{"ingredients": {"Fabric": 1, "Scrap": 1, "Patient": 1}, "result": {"Straijacket": 1}},
+	{"ingredients": {"Patient": 1, "Fabric":1, "Scrap": 2 }, "result": {"Warehouse": 1}}, #Pendig of creation
+	{"ingredients": {"Patient": 1, "Fabric":1, "Scrap": 2 }, "result": {"Laboratory": 1}}, #Pendig of creation
+	{"ingredients": {"Fabric": 3, "Patient": 1}, "result": {"Blanket": 1}},#Pendig of creation
 	{"ingredients": {"Pharmacy": 1, "Patient": 1}, "result": {"Drugs":2}},
-	{"ingredients": {"Drugs": 3, "Patient":1},"result": {"Medication": 2}},
+	{"ingredients": {"Drugs": 3, "Patient":1}, "result": {"Medication": 1}},
+	{"ingredients": {"Patient": 1, "Drugs": 2, "Laboratory": 1}, "result": {"Medication": 1}},
+	{"ingredients": {"Zombie": 1, "CrazyPatient":1}, "result": {"Flesh": 1}},
+]
+@export var combats = [
+	{"fifhters": {"Zombie":1, "CrazyPatient":1}, "drops": {"Flesh":1}},
 ]
 
 var days: int = 1
-var craftingTime = 5
+var craftingTime = 1
 var patientsInGame: Array = []
 var medicationsInGame: Array = []
 
@@ -27,6 +38,10 @@ func _ready():
 		pharmacy.position.x = 50
 		pharmacy.position.y = i*31
 		$CardsInGame.add_child(pharmacy)
+		
+	var zombie = preload("res://scenes/deck/zombie.tscn").instantiate()
+	zombie.position.x = -200
+	$CardsInGame.add_child(zombie)
 	#var drugs = preload("res://scenes/deck/drugs.tscn").instantiate()
 	#drugs.position.x = 50
 	#$CardsInGame.add_child(drugs)
@@ -65,35 +80,46 @@ func checkCrafting(selectedCards: Array):
 				craftable = false
 				break
 		
-		# If all ingredients are present and can play turn call craft and use consumables
+		# If all ingredients are present call craft
 		if craftable:
 			startCrafting(craft["result"],selectedCards)
 
 
 func createCraft(cards: Dictionary, selectedCards: Array):
-	var newPositon = selectedCards[0].position
-	for card in cards.keys():
-		for i in range(cards[card]):
-			var cardPath = "res://scenes/deck/" + card.to_lower() + ".tscn"
-			var newCardScene = load(cardPath)
-			
-			if newCardScene:
-				var newCard = newCardScene.instantiate()
-				newCard.position.x = newPositon.x + 100
-				newCard.position.y = newPositon.y + 100 + 31*i
-				
-				# Safe patients and medications in the array
-				match newCard.cardName:
-					"Patient": patientsInGame.append(newCard)
-					"Medication": medicationsInGame.append(newCard)
-				
-				$CardsInGame.add_child(newCard)
-			else:
-				print("Failed to load scente: " + cardPath)
 	
+	var allAreEntities: bool = true
+	var someoneDead: bool = false
 	for card in selectedCards:
 		if card is Consumable:
 			card.use(1)
+		if not card is Entity:
+			allAreEntities = false
+	
+	if allAreEntities:
+		if selectedCards[0].hurt(selectedCards[1].damage): someoneDead = true
+		if selectedCards[1].hurt(selectedCards[0].damage): someoneDead = true
+	
+	var newPositon = selectedCards[0].position
+	if not allAreEntities or someoneDead:
+		for card in cards.keys():
+			for i in range(cards[card]):
+				var cardPath = "res://scenes/deck/" + card.to_lower() + ".tscn"
+				var newCardScene = load(cardPath)
+				
+				if newCardScene:
+					var newCard = newCardScene.instantiate()
+					newCard.position.x = newPositon.x + 100
+					newCard.position.y = newPositon.y + 100 + 31*i
+					
+					# Safe patients and medications in the array
+					match newCard.cardName:
+						"Patient": patientsInGame.append(newCard)
+						"Medication": medicationsInGame.append(newCard)
+					
+					$CardsInGame.add_child(newCard)
+				else:
+					print("Failed to load scente: " + cardPath)
+
 
 
 func nextDay():
@@ -110,7 +136,7 @@ func nextDay():
 			medicationsInGame[i].use(1)
 		 
 		for i in range(patientsInGame.size() - medicationsInGame.size()):
-			patientsInGame[i].goCrazy()
+			patientsInGame[patientsInGame.size()-1].goCrazy()
 		print("Die")
 	$Day.start()
 
@@ -132,3 +158,39 @@ func _on_crafting_complete(cards: Dictionary, selectedCards: Array):
 
 func _on_day_timeout():
 	nextDay()
+
+#
+#func checkCombat(selectedCards: Array):
+	##Count how many fighers are of each type
+	#var fightersCount = {}
+	#
+	#for card in selectedCards:
+		#var cardName = card.cardName
+		#if fightersCount.has(cardName):
+			#fightersCount[cardName] += 1
+		#else:
+			#fightersCount[cardName] = 1
+	#
+	## Check if fighers match with any combat
+	#for combat in combats:
+		#var combatable: bool = true
+		#var fightersNeeded = combat["fifhters"]
+		#
+		## Check if needed fighers are present
+		#for fighter in fightersNeeded.keys():
+			#if not fightersCount.has(fighter) or fightersCount[fighter] != fightersNeeded[fighter]:
+				#combatable = false
+				#break # If one figher is missing the combat doesn't match
+		#
+		## Check if there is no extra fighers
+		#for fighter in fightersCount.keys():
+			#if not fightersNeeded.has(fighter):
+				#combatable = false
+				#break
+		#
+		## If all fighers are present call combat 
+		#if combatable:
+			#startFighting(combat["drops"],selectedCards)
+#
+#func startFighting(cards: Dictionary, selectedCards: Array):
+	#

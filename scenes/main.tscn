@@ -41,6 +41,7 @@ position = Vector2(576, 324)
 position = Vector2(576, 324)
 
 [node name="CRTShaderObject" type="ColorRect" parent="Camera2D"]
+visible = false
 material = SubResource("ShaderMaterial_umbrx")
 custom_minimum_size = Vector2(576, 324)
 offset_left = -1296.0

@@ -3,14 +3,14 @@ extends Entity
 @export var patientName: String = "Patient"
 @export var patientDescription: String = "A sick patient"
 @export var patientLige: int = 5
-@export var patientDamage: int = 1
+@export var patientDamage: int = 2
 
 func _init():
 	super._init(patientName, patientDescription, patientLige, patientDamage)
 
-func goCrazy():
-	var crazy = preload("res://scenes/deck/crazy_patient.tscn").instantiate()
-	crazy.position = position
-	get_parent().add_child(crazy)
-	get_parent().get_parent().patientsInGame.erase(self)
+func goNormal():
+	var normal = preload("res://scenes/deck/patient.tscn").instantiate()
+	normal.position = position
+	get_parent().add_child(normal)
+	get_parent().get_parent().patientsInGame.append(self)
 	queue_free()
