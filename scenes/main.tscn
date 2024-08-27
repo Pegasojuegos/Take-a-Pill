@@ -40,13 +40,12 @@ position = Vector2(576, 324)
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(576, 324)
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="CRTShaderObject" type="ColorRect" parent="Camera2D"]
 material = SubResource("ShaderMaterial_umbrx")
 custom_minimum_size = Vector2(576, 324)
-layout_mode = 0
-offset_left = -720.0
-offset_top = -405.0
-offset_right = 1877.0
-offset_bottom = 1056.0
+offset_left = -1296.0
+offset_top = -729.0
+offset_right = 1301.0
+offset_bottom = 732.0
 mouse_filter = 2
 mouse_force_pass_scroll_events = false
