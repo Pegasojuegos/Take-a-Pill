@@ -9,4 +9,7 @@ func _init():
 	super._init(patientName, patientDescription, patientLige, patientDamage)
 
 func goCrazy():
-	$Sprite2D.texture = load("res://assets/images/deck/card_crazy_patient.png")
+	var crazy = preload("res://scenes/deck/crazy_patient.tscn").instantiate()
+	crazy.position = position
+	get_parent().add_child(crazy)
+	queue_free()

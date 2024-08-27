@@ -68,7 +68,7 @@ func checkCrafting(selectedCards: Array):
 		# If all ingredients are present and can play turn call craft and use consumables
 		if craftable:
 			startCrafting(craft["result"],selectedCards)
-			#createCraft(craft["result"],selectedCards[0].position)
+
 
 func createCraft(cards: Dictionary, selectedCards: Array):
 	var newPositon = selectedCards[0].position
