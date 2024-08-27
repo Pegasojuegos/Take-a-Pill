@@ -8,6 +8,8 @@ var dragging: bool
 @export var cardsUnder: Array = []
 static var cardBeingDragged: Card = null
 
+signal cardRemoved
+
 func _init(cardName: String, description: String):
 	self.cardName = cardName
 	self.description = description
@@ -27,6 +29,7 @@ func dragCard(event):
 		if event.is_pressed() and Card.cardBeingDragged == null:# Only drag if no other card is being dragged
 			dragging = true
 			Card.cardBeingDragged = self
+			emit_signal("cardRemoved") # Emit signal if card moves to cancel crafting
 			get_parent().move_child(self, get_parent().get_child_count()-1)# Bring cart to the front
 		elif not event.is_pressed() and dragging:
 			dragging = false
@@ -58,5 +61,4 @@ func _on_area_2d_area_entered(area):
 func _on_area_2d_area_exited(area):
 	if area.get_parent() is Card and area.get_parent() !=self :
 		cardsUnder.erase(area.get_parent())
-
 

@@ -17,3 +17,9 @@ offset_left = -341.0
 offset_top = -175.0
 offset_right = -248.0
 offset_bottom = -126.0
+
+[node name="Day" type="Timer" parent="."]
+wait_time = 60.0
+one_shot = true
+
+[connection signal="timeout" from="Day" to="." method="_on_day_timeout"]
