@@ -38,6 +38,14 @@ func dragCard(event):
 			# then erase self from the cardsUnder
 			if cardsUnder.size() > 0:
 				cardsUnder.append(self)
+				
+				#If all are entities combate else craft
+				#var allAreEntities = true
+				#for card in cardsUnder:
+					#if not card is Entity: allAreEntities = false
+				#
+				#if allAreEntities: get_parent().get_parent().checkCombat(cardsUnder)
+				#else: 
 				get_parent().get_parent().checkCrafting(cardsUnder)
 				cardsUnder.clear()
 

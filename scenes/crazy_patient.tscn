@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://chcinfnbv7tfg"]
+
+[ext_resource type="PackedScene" uid="uid://cd2vhl7qalsf0" path="res://scenes/consumable.tscn" id="1_g05r2"]
+[ext_resource type="Script" path="res://scripts/crazy_patient.gd" id="2_db408"]
+
+[node name="CrazyPatient" instance=ExtResource("1_g05r2")]
+script = ExtResource("2_db408")
+patientName = "Patient"
+patientDescription = "A sick patient"
+patientLige = 5
+patientDamage = 2
+life = 0
+damage = 0
