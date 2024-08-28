@@ -4,6 +4,7 @@ extends Node2D
 	{"ingredients": {"Flesh": 2, "Drugs": 1, "Patient": 1}, "result": {"Zombie": 1}},
 	{"ingredients": {"Dump": 1, "Patient": 1}, "result": {"Fabric": 1, "Scrap": 1}},
 	{"ingredients": {"Fabric": 1, "Scrap": 1, "Patient": 1}, "result": {"Straijacket": 1}},
+	{"ingredients": {"CrazyPatient": 1, "Straijacket": 1,}, "result": {"Patient": 1}},
 	{"ingredients": {"Patient": 1, "Fabric":1, "Scrap": 2 }, "result": {"Warehouse": 1}}, #Pendig of creation
 	{"ingredients": {"Patient": 1, "Fabric":1, "Scrap": 2 }, "result": {"Laboratory": 1}}, #Pendig of creation
 	{"ingredients": {"Fabric": 3, "Patient": 1}, "result": {"Blanket": 1}},#Pendig of creation
@@ -11,15 +12,29 @@ extends Node2D
 	{"ingredients": {"Drugs": 3, "Patient":1}, "result": {"Medication": 1}},
 	{"ingredients": {"Patient": 1, "Drugs": 2, "Laboratory": 1}, "result": {"Medication": 1}},
 	{"ingredients": {"Zombie": 1, "CrazyPatient":1}, "result": {"Flesh": 1}},
-]
-@export var combats = [
-	{"fifhters": {"Zombie":1, "CrazyPatient":1}, "drops": {"Flesh":1}},
+	{"ingredients": {"Patient": 1, "CrazyPatient":1}, "result": {"Flesh": 1}},
 ]
 
 var days: int = 1
-var craftingTime = 1
+var craftingTime = 5
 var patientsInGame: Array = []
+var crazyPatientsInGame: Array = []
 var medicationsInGame: Array = []
+var numberOfSteals: int = 3
+var stelableCards:Dictionary = {
+	"Dump":{#Probability
+		"min":1,
+		"max":40
+	}, 
+	"Pharmacy":{
+		"min":41,
+		"max":80
+	}, 
+	"Patient": {
+		"min":81,
+		"max":100
+	}, 
+}
 
 func _ready():
 	#Generate initial patients
@@ -92,7 +107,7 @@ func createCraft(cards: Dictionary, selectedCards: Array):
 	for card in selectedCards:
 		if card is Consumable:
 			card.use(1)
-		if not card is Entity:
+		if not (card is Entity or card is Bot):
 			allAreEntities = false
 	
 	if allAreEntities:
@@ -113,8 +128,18 @@ func createCraft(cards: Dictionary, selectedCards: Array):
 					
 					# Safe patients and medications in the array
 					match newCard.cardName:
-						"Patient": patientsInGame.append(newCard)
+						"Patient": 
+							patientsInGame.append(newCard)
+							for j in range(selectedCards.size()):
+								if selectedCards[j].cardName == "CrazyPatient":
+									patientsInGame.erase(selectedCards[j])
+									selectedCards[j].queue_free()
 						"Medication": medicationsInGame.append(newCard)
+						"Zombie": #If craft a zombie, kill the patient
+							for j in range(selectedCards.size()):
+								if selectedCards[j].cardName == "Patient":
+									patientsInGame.erase(selectedCards[j])
+									selectedCards[j].queue_free()
 					
 					$CardsInGame.add_child(newCard)
 				else:
@@ -123,20 +148,34 @@ func createCraft(cards: Dictionary, selectedCards: Array):
 
 
 func nextDay():
+	stealCard()
 	days += 1
 	
 	if medicationsInGame >= patientsInGame:
 		#Use one medication for each patient
-		for i in range(patientsInGame.size()):
-			medicationsInGame[i].use(1)
+		var i = 0
+		while i < patientsInGame.size():
+			medicationsInGame[0].use(1)
+			medicationsInGame.remove_at(0)
+			i += 1
 		print("Life")
 	else:
-		#Use the medications aviable, and go crazy the patients wit no medication
-		for i in range(medicationsInGame.size()):
-			medicationsInGame[i].use(1)
-		 
-		for i in range(patientsInGame.size() - medicationsInGame.size()):
+		#Use the medications aviable, and go crazy the patients with no medication
+		while medicationsInGame.size() > 0:
+			medicationsInGame[0].use(1)
+			medicationsInGame.remove_at(0)
 			patientsInGame[patientsInGame.size()-1].goCrazy()
+			patientsInGame.remove_at(patientsInGame.size())
+		
+		# Make the crazy patients atack patients
+		var patientsAtacked: Array = []
+		for crazy in crazyPatientsInGame:
+			if patientsInGame.size() > 0:
+				var number = int(randf_range(0,patientsInGame.size()-1))
+				if not patientsAtacked.has(patientsInGame[number]):
+					patientsAtacked.append(patientsInGame[number])
+					crazy.atack(patientsInGame[number])
+		
 		print("Die")
 	$Day.start()
 
@@ -159,38 +198,29 @@ func _on_crafting_complete(cards: Dictionary, selectedCards: Array):
 func _on_day_timeout():
 	nextDay()
 
-#
-#func checkCombat(selectedCards: Array):
-	##Count how many fighers are of each type
-	#var fightersCount = {}
-	#
-	#for card in selectedCards:
-		#var cardName = card.cardName
-		#if fightersCount.has(cardName):
-			#fightersCount[cardName] += 1
-		#else:
-			#fightersCount[cardName] = 1
-	#
-	## Check if fighers match with any combat
-	#for combat in combats:
-		#var combatable: bool = true
-		#var fightersNeeded = combat["fifhters"]
-		#
-		## Check if needed fighers are present
-		#for fighter in fightersNeeded.keys():
-			#if not fightersCount.has(fighter) or fightersCount[fighter] != fightersNeeded[fighter]:
-				#combatable = false
-				#break # If one figher is missing the combat doesn't match
-		#
-		## Check if there is no extra fighers
-		#for fighter in fightersCount.keys():
-			#if not fightersNeeded.has(fighter):
-				#combatable = false
-				#break
-		#
-		## If all fighers are present call combat 
-		#if combatable:
-			#startFighting(combat["drops"],selectedCards)
-#
-#func startFighting(cards: Dictionary, selectedCards: Array):
-	#
+func stealCard():
+	var cardsToSteal: Array = []
+	cardsToSteal.append("Dump")
+	cardsToSteal.append("Pharmacy")
+	
+	while cardsToSteal.size() < numberOfSteals:
+		var random = int(randi_range(0,100))
+		for card in stelableCards.keys():
+			if random >= stelableCards[card]["min"] and random <= stelableCards[card]["max"]: 
+				cardsToSteal.append(card)
+	
+	var i: int = 0
+	for card in cardsToSteal:
+		var cardPath = "res://scenes/deck/" + card.to_lower() + ".tscn"
+		var newCardScene = load(cardPath)
+		
+		if newCardScene:
+			var newCard = newCardScene.instantiate()
+			newCard.position.x = -924 
+			newCard.position.y = -380 + 31 * i
+			$CardsInGame.add_child(newCard)
+			
+			match card:
+				"Patient": patientsInGame.append(newCard)
+			
+			i += 1
