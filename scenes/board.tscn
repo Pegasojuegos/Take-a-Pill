@@ -1,13 +1,26 @@
 [gd_scene load_steps=3 format=3 uid="uid://noigxkqenfra"]
 
 [ext_resource type="Script" path="res://scripts/board.gd" id="1_111hh"]
-[ext_resource type="Texture2D" uid="uid://cukd2blcyrqnc" path="res://assets/images/board.png" id="2_kxwac"]
+[ext_resource type="Texture2D" uid="uid://cvdlemtvayedo" path="res://assets/images/Board.png" id="2_rv7fb"]
 
 [node name="Board" type="Node2D"]
 script = ExtResource("1_111hh")
 
 [node name="Background" type="Sprite2D" parent="."]
 texture_filter = 1
-texture = ExtResource("2_kxwac")
+scale = Vector2(1.35, 1.35)
+texture = ExtResource("2_rv7fb")
 
 [node name="CardsInGame" type="Node2D" parent="."]
+
+[node name="Label" type="Label" parent="."]
+offset_left = -341.0
+offset_top = -175.0
+offset_right = -248.0
+offset_bottom = -126.0
+
+[node name="Day" type="Timer" parent="."]
+wait_time = 60.0
+one_shot = true
+
+[connection signal="timeout" from="Day" to="." method="_on_day_timeout"]

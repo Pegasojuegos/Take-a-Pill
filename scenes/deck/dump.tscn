@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://3uw83cad7geu"]
+
+[ext_resource type="PackedScene" uid="uid://cd2vhl7qalsf0" path="res://scenes/consumable.tscn" id="1_gv2j4"]
+[ext_resource type="Script" path="res://scripts/deck/dump.gd" id="2_alf6v"]
+[ext_resource type="Texture2D" uid="uid://jvayf6f0irkw" path="res://assets/images/deck/card_dump.png" id="3_8yr8m"]
+
+[node name="Dump" instance=ExtResource("1_gv2j4")]
+script = ExtResource("2_alf6v")
+fleshName = "Dump"
+fleshDescription = "It stinks!"
+fleshUses = 2
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("3_8yr8m")
