@@ -13,5 +13,7 @@ func _init(cardName: String, description: String, life: int, damage:int):
 func hurt(damageDone: int) -> bool:
 	life -= damageDone
 	var die: bool = life <= 0
-	if die : queue_free()
+	if die : 
+		emit_signal("cardRemoved")
+		queue_free()
 	return die

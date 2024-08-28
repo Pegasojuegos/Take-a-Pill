@@ -9,6 +9,7 @@ func _init():
 	super._init(patientName, patientDescription, patientLige, patientDamage)
 
 func goCrazy():
+	emit_signal("cardRemoved")
 	var crazy = preload("res://scenes/deck/crazy_patient.tscn").instantiate()
 	crazy.position = position
 	get_parent().add_child(crazy)

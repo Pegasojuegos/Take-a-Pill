@@ -32,7 +32,9 @@ func _ready():
 	progressBar.value = 0
 	progressBar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	progressBar.custom_minimum_size = Vector2(100,10)
-	progressBar.position = selectedCards[0].position + Vector2(-70 ,-100)
+	progressBar.position = Vector2(0,0)
+	progressBar.z_index = 1
+	position = Vector2(selectedCards[0].global_position.x-50,selectedCards[0].global_position.y+100)
 	selectedCards[0].add_child(progressBar)
 	
 	# Start progress bar update
