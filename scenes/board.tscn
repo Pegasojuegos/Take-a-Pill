@@ -8,19 +8,49 @@ script = ExtResource("1_111hh")
 
 [node name="Background" type="Sprite2D" parent="."]
 texture_filter = 1
-scale = Vector2(1.35, 1.35)
 texture = ExtResource("2_rv7fb")
 
 [node name="CardsInGame" type="Node2D" parent="."]
 
 [node name="Label" type="Label" parent="."]
-offset_left = -341.0
-offset_top = -175.0
-offset_right = -248.0
-offset_bottom = -126.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -439.0
+offset_right = 42.0
+offset_bottom = 440.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.513005, 0.000796853, 0.62964, 1)
+theme_override_font_sizes/font_size = 30
 
 [node name="Day" type="Timer" parent="."]
 wait_time = 60.0
 one_shot = true
 
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1162.5
+offset_top = -594.0
+offset_right = 1162.5
+offset_bottom = 594.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+
+[node name="Fin" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
 [connection signal="timeout" from="Day" to="." method="_on_day_timeout"]
+[connection signal="timeout" from="Fin" to="." method="_on_fin_timeout"]

@@ -1,6 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://cwtkee5lvoxan"]
+[gd_scene load_steps=3 format=3 uid="uid://cwtkee5lvoxan"]
 
 [ext_resource type="Script" path="res://scripts/crafting.gd" id="1_vgi3s"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_428um"]
+bg_color = Color(0.469496, 0.207959, 0.107272, 1)
+
 [node name="Crafting" type="Node2D"]
 script = ExtResource("1_vgi3s")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+offset_right = 4.0
+offset_bottom = 27.0
+theme_override_styles/background = SubResource("StyleBoxFlat_428um")

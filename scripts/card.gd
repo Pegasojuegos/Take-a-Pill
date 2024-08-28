@@ -25,6 +25,7 @@ func _process(_delta):
 
 # On click activate dragging and take to the front, on unclick desactivate dragging
 func dragCard(event):
+	z_index = 0
 	if event is InputEventMouseButton and isTopCard():
 		if event.is_pressed() and Card.cardBeingDragged == null:# Only drag if no other card is being dragged
 			dragging = true
@@ -40,8 +41,8 @@ func dragCard(event):
 				#Take the top card
 				var topCard = cardsUnder[0]
 				for card in cardsUnder:
-					if card.z_index > topCard.z_index: topCard = card
-				z_index = topCard.z_index + 1
+					if card.get_index() > topCard.get_index(): topCard = card
+				
 				#Put this card down the top card
 				position = Vector2(topCard.position.x,topCard.position.y+31)
 				cardsUnder.append(self)
