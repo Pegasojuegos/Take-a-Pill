@@ -1,0 +1,52 @@
+[gd_scene load_steps=4 format=3 uid="uid://b7vrfpqnbenr2"]
+
+[ext_resource type="PackedScene" uid="uid://noigxkqenfra" path="res://scenes/board.tscn" id="1_bdr8t"]
+[ext_resource type="Shader" path="res://Shaders/ShaderCRT.gdshader" id="2_awuwu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_umbrx"]
+resource_local_to_scene = true
+shader = ExtResource("2_awuwu")
+shader_parameter/overlay = true
+shader_parameter/scanlines_opacity = 0.265
+shader_parameter/scanlines_width = 0.115
+shader_parameter/grille_opacity = 0.334
+shader_parameter/resolution = Vector2(480, 270)
+shader_parameter/pixelate = false
+shader_parameter/roll = false
+shader_parameter/roll_speed = 8.0
+shader_parameter/roll_size = 0.0
+shader_parameter/roll_variation = 1.745
+shader_parameter/distort_intensity = 0.05
+shader_parameter/noise_opacity = 0.4
+shader_parameter/noise_speed = 5.0
+shader_parameter/static_noise_intensity = 0.06
+shader_parameter/aberration = 4.75e-08
+shader_parameter/brightness = 1.4
+shader_parameter/discolor = true
+shader_parameter/warp_amount = 1.0
+shader_parameter/clip_warp = false
+shader_parameter/vignette_intensity = 0.4
+shader_parameter/vignette_opacity = 0.5
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Board" parent="." instance=ExtResource("1_bdr8t")]
+position = Vector2(576, 324)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(576, 324)
+
+[node name="CRTShaderObject" type="ColorRect" parent="Camera2D"]
+visible = false
+material = SubResource("ShaderMaterial_umbrx")
+custom_minimum_size = Vector2(576, 324)
+offset_left = -1296.0
+offset_top = -729.0
+offset_right = 1301.0
+offset_bottom = 732.0
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
