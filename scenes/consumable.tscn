@@ -5,3 +5,11 @@
 
 [node name="Consumable" instance=ExtResource("1_wsvtv")]
 script = ExtResource("2_gmul6")
+
+[node name="Label" type="Label" parent="." index="2"]
+offset_left = 39.0
+offset_top = 67.0
+offset_right = 50.0
+offset_bottom = 90.0
+theme_override_colors/font_color = Color(0.374103, 0.19066, 0.000967573, 1)
+theme_override_colors/font_shadow_color = Color(0.912289, 0.912289, 0.912289, 1)

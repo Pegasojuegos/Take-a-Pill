@@ -7,3 +7,11 @@
 script = ExtResource("1_10qy0")
 life = 0
 damage = 0
+
+[node name="Label" type="Label" parent="." index="2"]
+offset_left = 39.0
+offset_top = 67.0
+offset_right = 50.0
+offset_bottom = 90.0
+theme_override_colors/font_color = Color(0.392346, 0.000173656, 0.420472, 1)
+theme_override_colors/font_shadow_color = Color(1, 0.870206, 0.985939, 1)
