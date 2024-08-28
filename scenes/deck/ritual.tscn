@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cd2vhl7qalsf0" path="res://scenes/consumable.tscn" id="1_wiwo2"]
 [ext_resource type="Script" path="res://scripts/deck/ritual.gd" id="2_foh3a"]
-[ext_resource type="Texture2D" uid="uid://b4caisg6jr3tu" path="res://assets/images/deck/card_doll.png" id="3_w85k2"]
+[ext_resource type="Texture2D" uid="uid://3vwkg0h6umo6" path="res://assets/images/deck/card_ritual.png" id="3_wf18j"]
 
 [node name="Ritual" instance=ExtResource("1_wiwo2")]
 script = ExtResource("2_foh3a")
@@ -11,4 +11,4 @@ ritualDescription = "ag??++ae**23r0`*/a+awe-*g/"
 ritualUses = 1
 
 [node name="Sprite2D" parent="." index="0"]
-texture = ExtResource("3_w85k2")
+texture = ExtResource("3_wf18j")

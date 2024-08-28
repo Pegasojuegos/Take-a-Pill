@@ -16,6 +16,9 @@ extends Node2D
 	{"ingredients": {"Fabric": 4, "Patient":1}, "result": {"Blanket": 1}},
 	{"ingredients": {"Blanket": 2, "Patient":1, "Flesh":2, "Scrap":1}, "result": {"Doll": 1}},
 	{"ingredients": {"Doll": 6, "Flesh":6, "Patient":6}, "result": {"Ritual": 1}},
+	{"ingredients": {"MisteryBox": 1, "Ritual":1, }, "result": {"final": 1}},
+	{"ingredients": {"Laboratory": 1, "Scrap":6, "Blanket":1, "Patient":1 }, "result": {"UpdateLabotatory": 1}},
+	{"ingredients": {"Patient": 1, "Drugs": 1, "UpdateLabotatory": 1}, "result": {"Medication": 1}},
 ]
 
 var end: bool = false
@@ -45,6 +48,10 @@ func _ready():
 	$Day.start()
 	var patientsNumber = 1
 	var pharmacyNumber = 1
+	var misteryBox = preload("res://scenes/deck/mistery_box.tscn").instantiate()
+	misteryBox.position.x = 980
+	misteryBox.position.y = 450
+	$CardsInGame.add_child(misteryBox)
 	for i in range(patientsNumber):
 		var patient = preload("res://scenes/deck/patient.tscn").instantiate()
 		patient.position.x = -100
@@ -57,7 +64,13 @@ func _ready():
 		pharmacy.position.x = 50
 		pharmacy.position.y = i*31
 		$CardsInGame.add_child(pharmacy)
-		
+	
+	var rit = preload("res://scenes/deck/ritual.tscn").instantiate()
+	rit.position.x = 100
+	rit.position.y = 100
+	$CardsInGame.add_child(rit)
+	
+	
 
 func _process(_delta):
 	$Label.text = "Day: " + str(days) + "\n" + str( "%0.1f" % $Day.time_left) #Show time with one decimal
@@ -113,14 +126,17 @@ func createCraft(cards: Dictionary, selectedCards: Array):
 		var newPositon = selectedCards[0].position
 		if not allAreEntities or someoneDead:
 			for card in cards.keys():
+				if card == "final":
+					$ColorRect.visible = true
+					$Fin.start()
 				for i in range(cards[card]):
 					var cardPath = "res://scenes/deck/" + card.to_lower() + ".tscn"
 					var newCardScene = load(cardPath)
 					
 					if newCardScene:
 						var newCard = newCardScene.instantiate()
-						newCard.position.x = newPositon.x + 100
-						newCard.position.y = newPositon.y + 100 + 31*i
+						newCard.position.x = newPositon.x + 150
+						newCard.position.y = newPositon.y + 150 + 31*i
 						
 						# Safe patients and medications in the array
 						match newCard.cardName:
@@ -217,8 +233,8 @@ func stealCard():
 		
 		if newCardScene:
 			var newCard = newCardScene.instantiate()
-			newCard.position.x = -924 
-			newCard.position.y = -380 + 31 * i
+			newCard.position.x = -900 
+			newCard.position.y = -400 + 31 * i
 			$CardsInGame.add_child(newCard)
 			
 			match card:
@@ -232,3 +248,11 @@ func gameOver():
 		$CardsInGame.remove_child(child)
 	print("Game Over")
 	get_tree().change_scene_to_file("res://scenes/deck/game_over.tscn")
+
+
+func _on_fin_timeout():
+	$Day.stop()
+	for child in $CardsInGame.get_children():
+		$CardsInGame.remove_child(child)
+	print("Win")
+	get_tree().change_scene_to_file("res://scenes/final.tscn")

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dg4go17hhd1oo"
+path="res://.godot/imported/3- Something's wrong.mp3-9b649acadc8ef7121bf122a3450f56cc.mp3str"
+
+[deps]
+
+source_file="res://assets/Music/3- Something's wrong.mp3"
+dest_files=["res://.godot/imported/3- Something's wrong.mp3-9b649acadc8ef7121bf122a3450f56cc.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

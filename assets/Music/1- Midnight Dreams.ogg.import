@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://pacrw6b8ir2w"
+path="res://.godot/imported/1- Midnight Dreams.ogg-2ee6b2674407868a3382e57ffb5d2f36.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/Music/1- Midnight Dreams.ogg"
+dest_files=["res://.godot/imported/1- Midnight Dreams.ogg-2ee6b2674407868a3382e57ffb5d2f36.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

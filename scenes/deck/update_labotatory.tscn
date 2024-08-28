@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://da7rx11nktw87"]
+
+[ext_resource type="PackedScene" uid="uid://dv6e70421to0i" path="res://scenes/deck/laboratory.tscn" id="1_cyafg"]
+[ext_resource type="Script" path="res://scripts/deck/update_labotatory.gd" id="2_6txy6"]
+
+[node name="UpdateLabotatory" instance=ExtResource("1_cyafg")]
+script = ExtResource("2_6txy6")
+updateLabotatoryName = "UpdateLabotatory"
+updateLabotatoryDescription = "Thats very suspicious"

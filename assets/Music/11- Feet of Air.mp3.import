@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dgev3m1g1i3gc"
+path="res://.godot/imported/11- Feet of Air.mp3-ab8501e78ddb37a4d70981f8589a501d.mp3str"
+
+[deps]
+
+source_file="res://assets/Music/11- Feet of Air.mp3"
+dest_files=["res://.godot/imported/11- Feet of Air.mp3-ab8501e78ddb37a4d70981f8589a501d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
