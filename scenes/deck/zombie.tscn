@@ -6,10 +6,10 @@
 
 [node name="Zombie" instance=ExtResource("1_qjvf0")]
 script = ExtResource("2_0dhj1")
-patientName = "Zombie"
-patientDescription = "A nice zombie?"
-patientLige = 8
-patientDamage = 3
+zombieName = "Zombie"
+zombieDescription = "A nice zombie?"
+zombietLige = 8
+zombieDamage = 3
 
 [node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("3_rvyru")

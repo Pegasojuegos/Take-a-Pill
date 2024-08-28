@@ -37,6 +37,13 @@ func dragCard(event):
 			# If there are cards under add self to the group and call crafting
 			# then erase self from the cardsUnder
 			if cardsUnder.size() > 0:
+				#Take the top card
+				var topCard = cardsUnder[0]
+				for card in cardsUnder:
+					if card.z_index > topCard.z_index: topCard = card
+				z_index = topCard.z_index + 1
+				#Put this card down the top card
+				position = Vector2(topCard.position.x,topCard.position.y+31)
 				cardsUnder.append(self)
 				
 				#If all are entities combate else craft
@@ -62,11 +69,11 @@ func isTopCard() -> bool:
 
 # Detect when contact with another card and save it
 func _on_area_2d_area_entered(area):
-	if area.get_parent() is Card and area.get_parent() != self:
+	if (area.get_parent() is Card or area.get_parent() is Bot) and area.get_parent() != self:
 		cardsUnder.append(area.get_parent())
 
 # Detect when leave contact with another card and forget it
 func _on_area_2d_area_exited(area):
-	if area.get_parent() is Card and area.get_parent() !=self :
+	if (area.get_parent() is Card or area.get_parent() is Bot) and area.get_parent() !=self :
 		cardsUnder.erase(area.get_parent())
 

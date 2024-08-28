@@ -1,15 +1,19 @@
-extends Entity
+extends Bot
 
-@export var patientName: String = "CrazyPatient"
-@export var patientDescription: String = "A crazy patient"
-@export var patientLige: int = 5
-@export var patientDamage: int = 1
+@export var crazyPatientName: String = "CrazyPatient"
+@export var crazyPatientDescription: String = "A sick patient"
+@export var crazyPatientLife: int = 5
+@export var crazyPatientDamage: int = 2
 
 func _init():
-	super._init(patientName, patientDescription, patientLige, patientDamage)
+	super._init(crazyPatientName, crazyPatientDescription, crazyPatientLife, crazyPatientDamage)
 
 func goNormal():
-	var patient = preload("res://scenes/deck/patient.tscn").instantiate()
-	patient.position = position
-	get_parent().add_child(patient)
+	var normal = preload("res://scenes/deck/patient.tscn").instantiate()
+	normal.position = position
+	get_parent().add_child(normal)
+	get_parent().get_parent().patientsInGame.append(normal)
+	get_parent().get_parent().crazyPatientsInGame.erase(self)
 	queue_free()
+
+

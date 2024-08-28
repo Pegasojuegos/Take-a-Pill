@@ -1,15 +1,15 @@
 [gd_scene load_steps=4 format=3 uid="uid://vw8uk3se6gpm"]
 
-[ext_resource type="PackedScene" uid="uid://phogh8u6jgco" path="res://scenes/entity.tscn" id="1_q6cya"]
+[ext_resource type="PackedScene" uid="uid://dfpsiucd31q6v" path="res://scenes/bot.tscn" id="1_mcake"]
 [ext_resource type="Script" path="res://scripts/deck/crazy_patient.gd" id="2_16c04"]
 [ext_resource type="Texture2D" uid="uid://baws7ueppqlfx" path="res://assets/images/deck/card_crazy_patient.png" id="2_72fgf"]
 
-[node name="CrazyPatient" instance=ExtResource("1_q6cya")]
+[node name="CrazyPatient" instance=ExtResource("1_mcake")]
 script = ExtResource("2_16c04")
-patientName = "CrazyPatient"
-patientDescription = "A crazy patient"
-patientLige = 5
-patientDamage = 1
+crazyPatientName = "CrazyPatient"
+crazyPatientDescription = "A sick patient"
+crazyPatientLife = 5
+crazyPatientDamage = 2
 
 [node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("2_72fgf")

@@ -13,4 +13,5 @@ func goCrazy():
 	crazy.position = position
 	get_parent().add_child(crazy)
 	get_parent().get_parent().patientsInGame.erase(self)
+	get_parent().get_parent().crazyPatientsInGame.append(crazy)
 	queue_free()
