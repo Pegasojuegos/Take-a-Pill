@@ -65,10 +65,6 @@ func _ready():
 		pharmacy.position.y = i*31
 		$CardsInGame.add_child(pharmacy)
 	
-	var rit = preload("res://scenes/deck/ritual.tscn").instantiate()
-	rit.position.x = 100
-	rit.position.y = 100
-	$CardsInGame.add_child(rit)
 	
 	
 
