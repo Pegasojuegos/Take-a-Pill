@@ -17,6 +17,9 @@ func hurt(damageDone: int) -> bool:
 	$Label.text = str(life)
 	var die: bool = life <= 0
 	if die : 
+		match cardName:
+			"Patient":
+				get_parent().get_parent().patientsInGame.erase(self)
 		emit_signal("cardRemoved")
 		queue_free()
 	return die

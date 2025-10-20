@@ -13,6 +13,7 @@ func _init(cardName: String, description: String, life: int, damage: int):
 	self.description = description
 	self.life = life
 	self.damage = damage
+	$Label.text = str(life)
 
 # Atack to one objective
 func atack(objective: Card):
@@ -34,8 +35,13 @@ func atack(objective: Card):
 
 func hurt(damageDone: int) -> bool:
 	life -= damageDone
+	$Label.text = str(life)
 	var die: bool = life <= 0
-	if die : queue_free()
+	if die :
+		match cardName:
+			"CrazyPatient":
+				get_parent().get_parent().crazyPatientsInGame.erase(self)
+		queue_free()
 	return die
 
 

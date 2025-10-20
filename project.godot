@@ -15,7 +15,7 @@ run/main_scene="res://scenes/deck/start_menu.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 boot_splash/bg_color=Color(0.109804, 0.0784314, 0.00392157, 1)
 boot_splash/image="res://icon.png"
-config/icon="res://icon.svg"
+config/icon="res://icon.png"
 
 [display]
 
@@ -28,3 +28,4 @@ window/stretch/aspect="expand"
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true

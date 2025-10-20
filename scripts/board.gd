@@ -15,7 +15,7 @@ extends Node2D
 	{"ingredients": {"Patient": 1, "CrazyPatient":1}, "result": {"Flesh": 1}},
 	{"ingredients": {"Fabric": 4, "Patient":1}, "result": {"Blanket": 1}},
 	{"ingredients": {"Blanket": 2, "Patient":1, "Flesh":2, "Scrap":1}, "result": {"Doll": 1}},
-	{"ingredients": {"Doll": 6, "Flesh":6, "Patient":6}, "result": {"Ritual": 1}},
+	{"ingredients": {"Doll": 3, "Flesh":3, "Patient":3}, "result": {"Ritual": 1}},
 	{"ingredients": {"MisteryBox": 1, "Ritual":1, }, "result": {"final": 1}},
 	{"ingredients": {"Laboratory": 1, "Scrap":6, "Blanket":1, "Patient":1 }, "result": {"UpdateLabotatory": 1}},
 	{"ingredients": {"Patient": 1, "Drugs": 1, "UpdateLabotatory": 1}, "result": {"Medication": 1}},
@@ -31,16 +31,28 @@ var numberOfSteals: int = 3
 var stelableCards:Dictionary = {
 	"Dump":{#Probability
 		"min":1,
-		"max":40
+		"max":35
 	}, 
 	"Pharmacy":{
-		"min":41,
+		"min":36,
 		"max":80
 	}, 
 	"Patient": {
 		"min":81,
+		"max":90
+	},
+	"Medication": {
+		"min":91,
+		"max":95
+	},
+	"Blanket":{
+		"min":95,
+		"max":98
+	},
+	"Flesh":{
+		"min":99,
 		"max":100
-	}, 
+	}
 }
 
 func _ready():
@@ -65,8 +77,7 @@ func _ready():
 		pharmacy.position.y = i*31
 		$CardsInGame.add_child(pharmacy)
 	
-	
-	
+
 
 func _process(_delta):
 	$Label.text = "Day: " + str(days) + "\n" + str( "%0.1f" % $Day.time_left) #Show time with one decimal
@@ -137,11 +148,9 @@ func createCraft(cards: Dictionary, selectedCards: Array):
 						# Safe patients and medications in the array
 						match newCard.cardName:
 							"Patient": 
-								patientsInGame.append(newCard)
 								for j in range(selectedCards.size()):
 									if selectedCards[j].cardName == "CrazyPatient":
-										patientsInGame.erase(selectedCards[j])
-										selectedCards[j].queue_free()
+										selectedCards[j].goNormal(newCard)
 							"Medication": medicationsInGame.append(newCard)
 							"Zombie": #If craft a zombie, kill the patient
 								for j in range(selectedCards.size()):
@@ -174,17 +183,19 @@ func nextDay():
 		while medicationsInGame.size() > 0:
 			medicationsInGame[0].use(1)
 			medicationsInGame.remove_at(0)
-		
-		# Make the crazy patients atack patients
-		var patientsAtacked: Array = []
-		for crazy in crazyPatientsInGame:
-			if patientsInGame.size() > 0:
-				var number = int(randf_range(0,patientsInGame.size()-1))
-				if not patientsAtacked.has(patientsInGame[number]):
-					patientsAtacked.append(patientsInGame[number])
-					crazy.atack(patientsInGame[number])
-		
+			
 		print("Die")
+		
+	# Make the crazy patients atack patients
+	var patientsAtacked: Array = []
+	for crazy in crazyPatientsInGame:
+		if patientsInGame.size() > 0:
+			var number = int(randf_range(0,patientsInGame.size()-1))
+			if not patientsAtacked.has(patientsInGame[number]):
+				patientsAtacked.append(patientsInGame[number])
+				crazy.atack(patientsInGame[number])
+		
+		
 	if patientsInGame.size() <= 0: gameOver()
 	else:
 		stealCard()
@@ -213,14 +224,13 @@ func _on_day_timeout():
 
 func stealCard():
 	var cardsToSteal: Array = []
-	cardsToSteal.append("Dump")
-	cardsToSteal.append("Pharmacy")
 	
 	while cardsToSteal.size() < numberOfSteals:
 		var random = int(randi_range(0,100))
 		for card in stelableCards.keys():
-			if random >= stelableCards[card]["min"] and random <= stelableCards[card]["max"]: 
-				cardsToSteal.append(card)
+			if not cardsToSteal.has(card):
+				if random >= stelableCards[card]["min"] and random <= stelableCards[card]["max"]: 
+					cardsToSteal.append(card)
 	
 	var i: int = 0
 	for card in cardsToSteal:
@@ -235,6 +245,7 @@ func stealCard():
 			
 			match card:
 				"Patient": patientsInGame.append(newCard)
+				"Medication": medicationsInGame.append(newCard)
 			
 			i += 1
 
@@ -252,3 +263,7 @@ func _on_fin_timeout():
 		$CardsInGame.remove_child(child)
 	print("Win")
 	get_tree().change_scene_to_file("res://scenes/final.tscn")
+
+
+func _on_next_day_pressed():
+	nextDay()

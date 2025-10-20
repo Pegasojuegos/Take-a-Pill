@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dfjvuenhbx45b"]
+[gd_scene load_steps=5 format=3 uid="uid://dfjvuenhbx45b"]
 
 [ext_resource type="Script" path="res://scenes/final.gd" id="1_2dbeo"]
 [ext_resource type="Texture2D" uid="uid://doycu1c01kfsh" path="res://assets/images/final.png" id="2_7luun"]
+[ext_resource type="AudioStream" uid="uid://bo1ypj8ud5axv" path="res://assets/Music/man-screaming-01.mp3" id="3_k4ftw"]
+[ext_resource type="Script" path="res://scenes/AudioStreamPlayer2D.gd" id="4_c5m4i"]
 
 [node name="Final" type="Control"]
 layout_mode = 3
@@ -34,3 +36,10 @@ offset_left = 42.0
 offset_right = 1962.0
 offset_bottom = 1081.0
 texture = ExtResource("2_7luun")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_k4ftw")
+autoplay = true
+script = ExtResource("4_c5m4i")
+
+[connection signal="finished" from="AudioStreamPlayer2D" to="AudioStreamPlayer2D" method="_on_finished"]

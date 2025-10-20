@@ -8,7 +8,7 @@
 script = ExtResource("2_foh3a")
 ritualName = "Ritual"
 ritualDescription = "ag??++ae**23r0`*/a+awe-*g/"
-ritualUses = 1
+ritualUses = 666
 
 [node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("3_wf18j")

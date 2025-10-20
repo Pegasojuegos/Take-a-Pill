@@ -8,11 +8,8 @@ extends Bot
 func _init():
 	super._init(crazyPatientName, crazyPatientDescription, crazyPatientLife, crazyPatientDamage)
 
-func goNormal():
-	var normal = preload("res://scenes/deck/patient.tscn").instantiate()
-	normal.position = position
-	get_parent().add_child(normal)
-	get_parent().get_parent().patientsInGame.append(normal)
+func goNormal(patient: Entity):
+	get_parent().get_parent().patientsInGame.append(patient)
 	get_parent().get_parent().crazyPatientsInGame.erase(self)
 	queue_free()
 
